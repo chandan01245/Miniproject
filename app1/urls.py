@@ -22,6 +22,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login_data, name="Application 1"), #Call app_data function
-    path('Dashboard/', views.dashboard_data, name="Template Data"), #Call Template function
+    path('', views.login_data, name="Application 1"), #Call app_data function
+    path('Dashboard/', views.dashboard_data, name="Dash"),
+    path('QR/',views.qr_code,name ='qr gen') #Call Template function
 ]

@@ -6,8 +6,7 @@
     <title>Home page</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'loginstyle.css' %}">
-    <!-- or use .ico -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/login.ico' %}">
     
     <style>
         body {
@@ -23,7 +22,7 @@
             <h2>Login</h2>
             <form>
                 <div class="input-field">
-                    <input type="text" placeholder="Email ID" required>
+                    <input type="text" placeholder="User" required>
                 </div>
                 <div class="input-field">
                     <input type="password" placeholder="Password" required>
@@ -34,7 +33,7 @@
                     </label>
                     <a href="#" class="forgot-password">Forgot Password?</a>
                 </div>
-                <button type="submit" class="login-btn">Login</button>
+                <button type="submit" class="login-btn"><a href="{% url 'Dash'%}">Login</a></button>
                 <div class="register">
                     <p>Don't have an account? <a href="#">Register</a></p>
                 </div>
