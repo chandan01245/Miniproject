@@ -4,10 +4,16 @@ from django.shortcuts import render
 
 # Create your views here.
 def login_data(request):
-    return render(request,"login.html")
+    if request.method == 'POST':
+        users = ['chandan']
+        #Perform Your checks here
+        if request.POST.get("username") in users:
+            return render(request, 'Dashboard.html')
+        else:
+            return render(request,"Login.html",{"errordata":"Enter Valid Details"})
+        
+    return render(request,"Login.html")
 
-def dashboard_data(request):
-    return render(request, 'Dashboard.html')
 
 def qr_code(request):
     import os
@@ -100,3 +106,12 @@ def qr_code(request):
                 server.quit()  # Close the connection properly
     
     return render(request,"patients.html")
+
+def load_vending_machine(request):
+    if request.method == 'POST':
+        qr_code = request.POST.get("qrCode")
+        
+        print("QR Code: ",qr_code)
+        return HttpResponse("Backend Response: "+qr_code)
+
+    return render(request,"VendingMachine.html")
