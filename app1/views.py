@@ -106,3 +106,12 @@ def qr_code(request):
                 server.quit()  # Close the connection properly
     
     return render(request,"patients.html")
+
+def load_vending_machine(request):
+    if request.method == 'POST':
+        qr_code = request.POST.get("qrCode")
+        
+        print("QR Code: ",qr_code)
+        return HttpResponse("Backend Response: "+qr_code)
+
+    return render(request,"VendingMachine.html")
