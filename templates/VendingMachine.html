@@ -4,8 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'vendingmachine.css' %}">
     <title>QR Vending Machine</title>
@@ -15,8 +14,7 @@
     <div class="container">
         <h1>Medical Vending Machine</h1>
         <div class="section">
-            <div id="my-qr-reader">
-            </div>
+            <div id="my-qr-reader"> </div>
         </div>
     </div>
     <form id="qr_form" method ="POST" action="">
@@ -27,7 +25,7 @@
     </script>
     
     <script>
-        function domReady(fn) 
+        function domReady(fn)
         {
             if (
                 document.readyState === "complete" ||

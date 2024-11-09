@@ -23,6 +23,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_data, name="Application 1"), #Call app_data function
-    path('QR/',views.qr_code,name ='qr gen'), #Call Template function
-    path('vending_machine/',views.load_vending_machine,name ='Vending Machine') #Call Template function
+    path('QR/',views.qr_code,name ='qrgen'), #Call Template function
+    path('vm/',views.load_vending_machine,name ='Vending Machine') #Call Template function
 ]

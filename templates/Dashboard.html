@@ -3,119 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>DocCare - Doctor's Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'images/dashboard.png' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://unpkg.com/lucide-icons/dist/umd/lucide.css" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <i data-lucide="stethoscope" class="brand-icon"></i>
+                <span>DocCare</span>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h2>REMEDICA</h2>
-                <p>Remote Medicine</p>
-                <nav>
-                    <ul>
-                        <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-                        <li><a href="#"><i class="fas fa-prescription-bottle-alt"></i> Prescriptions</a></li>
-                        <li><a href="#"><i class="fas fa-user-friends"></i> Patients</a></li>
-                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
-                        <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
-                        <li><a href="#"><i class="logout-btn">Logout</i></a></li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
+        <div class="tabs">
+            <button class="tab active" data-tab="patients">
+                <i data-lucide="users"></i>
+                Patients
+            </button>
+            <button class="tab" data-tab="appointments">
+                <i data-lucide="calendar"></i>
+                Appointments
+            </button>
+            <button class="tab" data-tab="prescriptions">
+                <i data-lucide="pill"></i>
+                Prescriptions
+            </button>
+        </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="header">
-                <h1>Welcome Chandan!</h1>
-                <p>You have <b>7 patients</b> remaining today!</p>
-                <p>Monday, 19 October 2024</p>
-            </div>
-
-            <!-- Appointments and Revenue -->
-            <section class="dashboard-info">
-                <div class="appointments">
-                    <h3>Today's Appointments</h3>
-                    <ul>
-                        <li>Augustine Watts <span>8:00</span></li>
-                        <li>Clementine Baker <span>9:00</span></li>
-                        <li>Jimmie Christian <span>10:30</span></li>
-                        
-                    </ul>
-                </div>
-                <div class="revenue">
-                    <h3>Revenue</h3>
-                    <div class="revenue-container">
-                        <div class="revenue-item">
-                            <h4>This Month</h4>
-                            <p class="revenue-amount">$3204</p>
+        <main class="content">
+            <!-- Patient Registration Form -->
+            <div class="tab-content active" id="patients">
+                <h2>New Patient Registration</h2>
+                <form class="registration-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="user"></i>
+                                Patient Name
+                            </label>
+                            <input type="text" required>
                         </div>
-                        <div class="revenue-item">
-                            <h4>This Week</h4>
-                            <p class="revenue-amount">$892</p>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="phone"></i>
+                                Phone Number
+                            </label>
+                            <input type="tel" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="mail"></i>
+                                Email
+                            </label>
+                            <input type="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="calendar"></i>
+                                Appointment Date
+                            </label>
+                            <input type="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="clock"></i>
+                                Preferred Time
+                            </label>
+                            <input type="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="file-text"></i>
+                                Reason for Visit
+                            </label>
+                            <input type="text" required>
                         </div>
                     </div>
-                </div>
-            </section>
+                    <button type="submit" class="btn-primary">Schedule Appointment</button>
+                </form>
+            </div>
 
-            <!-- Analytics Section -->
-            <section class="analytics-dash">
-                <div class="analytics">
-                    <h3>Analytics</h3>
-                    <div class="pie-chart-container">
-                        <canvas id="myPieChart"></canvas>
+            <!-- Appointments List -->
+            <div class="tab-content" id="appointments">
+                <h2>Today's Appointments</h2>
+                <div class="appointments-list">
+                    <div class="appointment-card">
+                        <div class="appointment-info">
+                            <div class="patient-name">
+                                <i data-lucide="user"></i>
+                                <span>Sarah Johnson</span>
+                            </div>
+                            <div class="appointment-time">
+                                <i data-lucide="calendar"></i>
+                                <span>2024-03-20</span>
+                                <i data-lucide="clock"></i>
+                                <span>10:00</span>
+                            </div>
+                            <div class="appointment-reason">
+                                <i data-lucide="file-text"></i>
+                                <span>Annual Checkup</span>
+                            </div>
+                        </div>
+                        <span class="status scheduled">Scheduled</span>
+                    </div>
+
+                    <div class="appointment-card">
+                        <div class="appointment-info">
+                            <div class="patient-name">
+                                <i data-lucide="user"></i>
+                                <span>Michael Chen</span>
+                            </div>
+                            <div class="appointment-time">
+                                <i data-lucide="calendar"></i>
+                                <span>2024-03-20</span>
+                                <i data-lucide="clock"></i>
+                                <span>11:30</span>
+                            </div>
+                            <div class="appointment-reason">
+                                <i data-lucide="file-text"></i>
+                                <span>Follow-up</span>
+                            </div>
+                        </div>
+                        <span class="status scheduled">Scheduled</span>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <!-- Prescription Form -->
+            <div class="tab-content" id="prescriptions">
+                <h2>Write Prescription</h2>
+                <form class="prescription-form">
+                    <div class="form-group">
+                        <label>
+                            <i data-lucide="user"></i>
+                            Select Patient
+                        </label>
+                        <select required>
+                            <option value="">Select a patient</option>
+                            <option value="1">Sarah Johnson - 2024-03-20</option>
+                            <option value="2">Michael Chen - 2024-03-20</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="pill"></i>
+                                Medication
+                            </label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dosage</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="calendar"></i>
+                                Duration
+                            </label>
+                            <input type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i data-lucide="file-text"></i>
+                            Additional Notes
+                        </label>
+                        <textarea rows="4"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Issue Prescription</button>
+                </form>
+            </div>
         </main>
+    </div>
 
-        <!-- Profile Section -->
-        <aside class="profile">
-            <div class="doctor-info">
-                <img src="{% static 'images/doctor.png'%}" alt="Dr. Mary Grey">
-                <h3>Dr. Daniel Grey</h3>
-                <p>Psychiatrist, Therapist</p>
-                <div class="rating">
-                    <p>Overall Rating: 4.8</p>
-                    <p>Total Patients: 129</p>
-                </div>
-                <div class="alerts">
-                    <h3>Alerts</h3>
-                    <p>New appointment: 30 mins</p>
-                    <p>Appointment cancelled: 1 hour</p>
-                    <p>New review: 2 hours</p>
-                </div>
-            </div>
-            <button class="upgrade-btn">Upgrade</button>
-        </aside>
-    <!-- Script to create Pie Chart -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
-        var ctx = document.getElementById('myPieChart').getContext('2d');
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Appointments', 'Patients', 'New Patients'],
-                datasets: [{
-                    data: [25, 40, 35], // Sample data for chart
-                    backgroundColor: ['#2a64db', '#7d8498', '#e6edff']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    }
-                }
-            }
+        lucide.createIcons();
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
         });
     </script>
 </body>
