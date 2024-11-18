@@ -21,8 +21,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.login_data, name="Application 1"), #Call app_data function
-    path('QR/',views.qr_code,name ='qrgen'), #Call Template function
-    path('vm/',views.load_vending_machine,name ='Vending Machine') #Call Template function
+    path('', views.login_user, name="login"),
+    path('Dashboard/',views.user_dashboard,name ='dashboard'),
+    path('Registeration/',views.user_registeration,name='patient-registeration'),
+    path('Appointment/',views.user_appointment,name='appointment'),
+    path('prescription/',views.prescription,name="prescription"),
+    path('error/',views.error_page,name="error"),
+    path('vm/',views.load_vending_machine,name ='Vending Machine'),
 ]

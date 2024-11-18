@@ -1,111 +1,100 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+
+from .form import medication_form, register_form
+from .models import register
+from .qr_generator import qr_gen
 
 
 # Create your views here.
-def login_data(request):
+def login_user(request):
     if request.method == 'POST':
-        users = ['chandan']
-        #Perform Your checks here
-        if request.POST.get("username") in users:
-            return render(request, 'Dashboard.html')
+        username = request.POST.get("username")
+        password = request.POST.get("Password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request,user)
+            messages.success(request,("You have been logged in"))
+            return redirect('dashboard',{'user':username})
         else:
-            return render(request,"Login.html",{"errordata":"Enter Valid Details"})
-        
-    return render(request,"Login.html")
-
-
-def qr_code(request):
-    import os
-    import smtplib
-    from email import encoders
-    from email.mime.base import MIMEBase
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-
-    import png
-    import pyqrcode
-    formMail =" "
-    formdata =" "
-    if request.method == 'POST':
-        formMail = request.POST.get("mail")
-        formdata = request.POST.get("data")
-        string =" "
-        # String which represents the QR code
-        s = [formdata]
-        for i in range(len(s)):
-            string += s[i]
-        # Generate QR code
-        hell = pyqrcode.create(string)
-
-        # Create and save the png file naming "myqr.png"
-        hell.png('myqr.png', scale = 6)
-
-        # Email and password for the sender's email account
-        sender_email = "thisisatestornotatest@gmail.com"
-        password = "bmbhmamziowqeszs"
-
-        # Email details
-        receiver_email = formMail
-        subject = "QR code test"
-        body = "Please find the attached image."
-
-        # Create a multipart message
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = receiver_email
-        msg['Subject'] = subject
-
-        # Attach the email body
-        msg.attach(MIMEText(body, 'plain'))
-
-        # Specify the image file to attach
-        filename = "myqr.png"  # Make sure this file exists in the current directory or provide a full path
-        attachment_path = os.path.join(os.getcwd(), filename)
-
-        # Open the image file in binary mode and attach it to the email
-        with open(attachment_path, "rb") as attachment:
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(attachment.read())
-
-        # Encode the file to base64
-        encoders.encode_base64(part)
-
-        # Add header
-        part.add_header(
-            "Content-Disposition",
-            f"attachment; filename={filename}",
-        )
-
-        # Attach the file to the message
-        msg.attach(part)
-
-        # Set up the SMTP server
-        smtp_server = "smtp.gmail.com"  # Use your SMTP server address (e.g., smtp.gmail.com for Gmail)
-        smtp_port = 587  # Use 465 for SSL, 587 for TLS
-
-        # Send the email
-        server = None  # Define the server before the try block
-
-        try:
-            # Create an SMTP session
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()  # Secure the connection
-            server.login(sender_email, password)
-
-            # Send the email
-            text = msg.as_string()
-            server.sendmail(sender_email, receiver_email, text)
-            print("Email sent successfully!")
-
-        except Exception as e:
-            print(f"Failed to send email: {e}")
-
-        finally:
-            if server:
-                server.quit()  # Close the connection properly
+            messages.success(request,("Invalid password. PLease try again"))
+            return redirect('login')
+    else:
+        return render(request,"Login.html")
     
-    return render(request,"patients.html")
+def logout_user(request):
+    logout(request)
+    messages.success(request,("You have been logged out"))
+    return redirect('login')
+
+@login_required
+def user_dashboard(request):
+    submitted = False
+    if request.method == 'POST':
+        print("POST data:", request.POST)
+        form = register_form(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/Dashboard?submitted=True')
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = register_form()
+        if 'submitted' in request.GET:
+            submitted = True
+    user_list = register.objects.all()
+    user_count = register.objects.all().count()
+    return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count})
+
+@login_required
+def user_registeration(request):
+    submitted = False
+    if request.method == 'POST':
+        print("POST data:", request.POST)
+        form = register_form(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,("New patient registered"))
+            return HttpResponseRedirect('/Registeration?submitted=True')
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = register_form()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request,"register.html",{'current_path': request.path})
+
+@login_required
+def user_appointment(request):
+    user_list = register.objects.all()
+    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list})
+
+@login_required
+def prescription(request):
+    submitted = False
+    if request.method == 'POST':
+        print("POST data:", request.POST)
+        form = medication_form(request.POST)
+        if form.is_valid():
+            instance = form.save()
+            print("Saved instance:", instance)
+            formMail = instance.email
+            formdata = instance.Medication
+            print("Calling qr_gen with:", formMail, formdata)
+            qr_gen(formMail,formdata)
+            messages.success(request,("Mail sent Succesfully"))
+            return HttpResponseRedirect('/prescription?submitted=True')
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = medication_form()
+        
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request,"prescription.html",{'current_path': request.path})
 
 def load_vending_machine(request):
     if request.method == 'POST':
@@ -115,3 +104,6 @@ def load_vending_machine(request):
         return HttpResponse("Backend Response: "+qr_code)
 
     return render(request,"VendingMachine.html")
+
+def error_page(request):
+    return render(request,'error.html')

@@ -1,0 +1,19 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+        // Get the current path from the Django context
+        const currentPath = "{{ current_path }}"; // This comes from Django's context
+        // Iterate through all tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            const tabUrl = tab.dataset.url; // Get the URL from data-url attribute
+            // If the current path matches the tab URL, activate the tab
+            if (currentPath === tabUrl) {
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            } else {
+                tab.classList.remove('active');
+                document.getElementById(tab.dataset.tab).classList.remove('active');
+            }
+        });
+    </script>
