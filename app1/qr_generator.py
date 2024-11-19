@@ -26,7 +26,7 @@ def qr_gen(formMail,formdata,dosage,frequency,notes):
     # Email details
     receiver_email = formMail
     subject = f"Your Prescribed Drug is {formdata} {dosage}"
-    body = f"Please take it {frequency} times a day. {notes}. Please scan the QR code at the nearest Vending machine"
+    body = f"Please take it {frequency}. {notes}. Please scan the QR code at the nearest Automated Drug Dispenser"
 
     # Create a multipart message
     msg = MIMEMultipart()
