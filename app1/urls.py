@@ -23,8 +23,10 @@ from . import views
 urlpatterns = [
     path('', views.login_user, name="login"),
     path('Dashboard/',views.user_dashboard,name ='dashboard'),
-    path('Registeration/',views.user_registeration,name='patient-registeration'),
+    path('Login/',views.logout_user,name="logout"),
+    path('Registration/',views.user_registration,name='patient-registration'),
     path('Appointment/',views.user_appointment,name='appointment'),
+    path('Appointment/<id>',views.delete_appointment,name='delete-appointment'),
     path('prescription/',views.prescription,name="prescription"),
     path('error/',views.error_page,name="error"),
     path('vm/',views.load_vending_machine,name ='Vending Machine'),

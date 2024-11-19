@@ -34,9 +34,9 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'patient-registeration' %}" class="nav-link text-dark ">
+                <a href="{% url 'patient-registration' %}" class="nav-link text-dark ">
                     <i class="bi bi-person-plus me-2"></i>
-                Patients
+                Patient Registration
                 </a>
             </li>
             <li>
@@ -46,7 +46,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'login' %}" class="nav-link link-body-emphasis">
+                <a href="{% url 'logout' %}" class="nav-link link-body-emphasis">
                     <i class="bi bi-box-arrow-right me-2"></i>
                     Logout
                 </a>
@@ -64,11 +64,11 @@
             {% endif %}
             <!-- Header -->
             <header class="header">
-                <h3>Welcome Dr. {{ user }} </h3>
+                <h2>Welcome Dr. {{ user }}</h2>
                 <div class="header-actions">
                     <div class="user-profile">
                         <div class="user-info">
-                            <p>Dr. {{ user }}<br/>
+                            <p>Dr. {{ user }} <br/>
                             <span>General Physician</span></p>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
         <div class="row modal-body">
             <div class="card content-grid modal-body w-50 px-3 py-3 mr-1 my-3 overflow-y-auto">
                 <div class="card-header">
-                    Featured
+                    Appointments
                 </div>
                 <div class="appointment-list overflow-auto border rounded p-3 ml-3" style="max-height: 300px;">
                     {% for user in user_list %}
@@ -129,6 +129,7 @@
                                 <p class="mb-0">{{ user.Date }}</p>
                                 <span class="badge bg-success">Upcoming</span>
                             </div>
+                            
                         </div>
                     {% empty %}
                         <p class="text-muted">No appointments found.</p>

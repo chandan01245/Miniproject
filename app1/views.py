@@ -5,11 +5,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from .form import medication_form, register_form
-from .models import register
+from .models import appointment, register
 from .qr_generator import qr_gen
 
 
 # Create your views here.
+@login_required
+def test_view(request):
+    print(f"Is authenticated: {request.user.is_authenticated}")
+    print(f"User: {request.user}")
+    return HttpResponse("You are logged in.")
+
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get("username")
@@ -18,7 +24,8 @@ def login_user(request):
         if user is not None:
             login(request,user)
             messages.success(request,("You have been logged in"))
-            return redirect('dashboard',{'user':username})
+            request.session['username'] = username
+            return redirect("dashboard")
         else:
             messages.success(request,("Invalid password. PLease try again"))
             return redirect('login')
@@ -27,6 +34,7 @@ def login_user(request):
     
 def logout_user(request):
     logout(request)
+    request.session.flush()
     messages.success(request,("You have been logged out"))
     return redirect('login')
 
@@ -47,10 +55,11 @@ def user_dashboard(request):
             submitted = True
     user_list = register.objects.all()
     user_count = register.objects.all().count()
-    return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count})
+    username = request.session.get('username', 'Guest')
+    return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count,'user':username})
 
 @login_required
-def user_registeration(request):
+def user_registration(request):
     submitted = False
     if request.method == 'POST':
         print("POST data:", request.POST)
@@ -58,7 +67,7 @@ def user_registeration(request):
         if form.is_valid():
             form.save()
             messages.success(request,("New patient registered"))
-            return HttpResponseRedirect('/Registeration?submitted=True')
+            return HttpResponseRedirect('/Registration?submitted=True')
         else:
             print("Form errors:", form.errors)
     else:
@@ -69,6 +78,13 @@ def user_registeration(request):
 
 @login_required
 def user_appointment(request):
+    user_list = register.objects.all()
+    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list})
+
+def delete_appointment(request,id):
+    appointment_id = register.objects.get(pk=id)
+    appointment_id.delete()
+    messages.success(request,("Deleted Appointment"))
     user_list = register.objects.all()
     return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list})
 
@@ -83,9 +99,12 @@ def prescription(request):
             print("Saved instance:", instance)
             formMail = instance.email
             formdata = instance.Medication
+            dosage = instance.Dosage
+            frequency = instance.frequency
+            notes = instance.additional_notes
             print("Calling qr_gen with:", formMail, formdata)
-            qr_gen(formMail,formdata)
-            messages.success(request,("Mail sent Succesfully"))
+            qr_gen(formMail,formdata,dosage,frequency,notes)
+            messages.success(request,("Mail sent Successfully"))
             return HttpResponseRedirect('/prescription?submitted=True')
         else:
             print("Form errors:", form.errors)

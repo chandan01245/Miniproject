@@ -21,7 +21,7 @@
                 {% endfor %}
         {% endif %}
         <div class="tabs">
-            <button class="tab active"data-url="{% url 'patient-registeration' %}" data-tab="patients">
+            <button class="tab active"data-url="{% url 'patient-registration' %}" data-tab="patients">
                 <i data-lucide="users"></i>
                 Patients
             </button>
@@ -52,7 +52,7 @@
                                 <i data-lucide="mail"></i>
                                 Email
                             </label>
-                            <input type="email" name="mail" required>
+                            <input type="email" name="mail">
                         </div>
                         <div class="form-group">
                             <label>
@@ -60,6 +60,13 @@
                                 Appointment Date
                             </label>
                             <input type="date" name="Date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i data-lucide="file-text"></i>
+                                Reason for visit
+                            </label>
+                            <textarea rows="4" name="Reason"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn-primary">Schedule Appointment</button>

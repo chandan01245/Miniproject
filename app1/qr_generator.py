@@ -9,7 +9,7 @@ import png
 import pyqrcode
 
 
-def qr_gen(formMail,formdata):
+def qr_gen(formMail,formdata,dosage,frequency,notes):
     print(f"Generating QR for email: {formMail} with data: {formdata}")
     string =" "
     s = [formdata]
@@ -25,8 +25,8 @@ def qr_gen(formMail,formdata):
 
     # Email details
     receiver_email = formMail
-    subject = "Your Prescribed Drug"
-    body = "Please scan the QR code at the nearest Vending machine"
+    subject = f"Your Prescribed Drug is {formdata} {dosage}"
+    body = f"Please take it {frequency} times a day. {notes}. Please scan the QR code at the nearest Vending machine"
 
     # Create a multipart message
     msg = MIMEMultipart()
