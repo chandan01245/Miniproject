@@ -5,8 +5,8 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-import png
-import pyqrcode
+import png # type: ignore
+import pyqrcode # type: ignore
 
 
 def qr_gen(formMail,formdata,dosage,frequency,notes):
