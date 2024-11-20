@@ -2,18 +2,20 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
-        // Get the current path from the Django context
-        const currentPath = "{{ current_path }}"; // This comes from Django's context
+        // Get the current path from Django context
+        const currentPath = "{{ current_path }}"; // Passed from Django context
         // Iterate through all tabs
         document.querySelectorAll('.tab').forEach(tab => {
-            const tabUrl = tab.dataset.url; // Get the URL from data-url attribute
-            // If the current path matches the tab URL, activate the tab
-            if (currentPath === tabUrl) {
+            const tabUrls = tab.dataset.url.split(',').map(url => url.trim()); // Split and clean URLs
+            // If the current path matches any of the URLs, activate the tab
+            if (tabUrls.includes(currentPath)) {
                 tab.classList.add('active');
                 document.getElementById(tab.dataset.tab).classList.add('active');
             } else {
                 tab.classList.remove('active');
-                document.getElementById(tab.dataset.tab).classList.remove('active');
+                if (document.getElementById(tab.dataset.tab)) {
+                    document.getElementById(tab.dataset.tab).classList.remove('active');
+                }
             }
         });
     </script>

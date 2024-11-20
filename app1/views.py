@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,12 +12,6 @@ from .qr_generator import qr_gen
 
 
 # Create your views here.
-@login_required
-def test_view(request):
-    print(f"Is authenticated: {request.user.is_authenticated}")
-    print(f"User: {request.user}")
-    return HttpResponse("You are logged in.")
-
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get("username")
@@ -41,6 +37,7 @@ def logout_user(request):
 @login_required
 def user_dashboard(request):
     submitted = False
+    today = datetime.today().date()
     if request.method == 'POST':
         print("POST data:", request.POST)
         form = register_form(request.POST)
@@ -56,7 +53,7 @@ def user_dashboard(request):
     user_list = register.objects.all()
     user_count = register.objects.all().count()
     username = request.session.get('username', 'Guest')
-    return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count,'user':username})
+    return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count,'user':username,'today':today})
 
 @login_required
 def user_registration(request):
@@ -79,14 +76,24 @@ def user_registration(request):
 @login_required
 def user_appointment(request):
     user_list = register.objects.all()
-    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list})
+    today = datetime.today().date()
+    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list,'today':today})
+
+@login_required
+def search_bar(request):
+    today = datetime.today().date()
+    if request.method == 'POST':
+        searched = request.POST.get('Search')
+        names = register.objects.filter(name__contains=searched)
+    return render(request,"search.html",{'searched':names,'today':today})
 
 def delete_appointment(request,id):
+    today = datetime.today().date()
     appointment_id = register.objects.get(pk=id)
     appointment_id.delete()
     messages.success(request,("Deleted Appointment"))
     user_list = register.objects.all()
-    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list})
+    return render(request,"appointments.html",{'current_path': request.path ,'user_list':user_list,'today':today})
 
 @login_required
 def prescription(request):
@@ -118,7 +125,6 @@ def prescription(request):
 def load_vending_machine(request):
     if request.method == 'POST':
         qr_code = request.POST.get("qrCode")
-        
         print("QR Code: ",qr_code)
         return HttpResponse("Backend Response: "+qr_code)
 

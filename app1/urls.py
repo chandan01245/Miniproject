@@ -26,6 +26,7 @@ urlpatterns = [
     path('Login/',views.logout_user,name="logout"),
     path('Registration/',views.user_registration,name='patient-registration'),
     path('Appointment/',views.user_appointment,name='appointment'),
+    path('Search/',views.search_bar,name='search'),
     path('Appointment/<id>',views.delete_appointment,name='delete-appointment'),
     path('prescription/',views.prescription,name="prescription"),
     path('error/',views.error_page,name="error"),

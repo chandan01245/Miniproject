@@ -127,7 +127,13 @@
                             </div>
                             <div class="appointment-time text-end">
                                 <p class="mb-0">{{ user.Date }}</p>
+                                {% if user.Date > today %}
                                 <span class="badge bg-success">Upcoming</span>
+                                {% elif user.Date == today %}
+                                <span class="badge bg-warning">Ongoing</span>
+                                {% else %}
+                                <span class="badge bg-danger">Done</span>
+                                {% endif %}
                             </div>
                             
                         </div>

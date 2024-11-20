@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointment page</title>
+    <title>Appointments</title>
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'images/people-fill.svg' %}">
     <link rel="stylesheet" href="{% static 'PrescriptionStyles.css' %}">
@@ -28,18 +28,29 @@
             </div>
         {% endfor %}
     {% endif %}
-    <div class="tabs">
-        <button class="tab active" data-url="{% url 'appointment' %}" data-tab="appointments">
-            <i data-lucide="calendar"></i>
-            Appointments
-        </button>
+    <div class="tabs container-fluid">
+        <a href="{% url 'appointment' %}" class="text-decoration-none">
+            <button class="tab active" data-url="{% url 'appointment' %},{% for user in user_list %}{% url 'delete-appointment' user.id %},{% endfor %}{% url 'search' %}" data-tab="appointments">
+                <i data-lucide="calendar"></i>
+                Appointments
+            </button>
+        </a>
+        
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <form class="d-flex align-items-center ms-auto" role="search" style="max-width: 300px;" method="POST" action="{% url 'search' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="flex: 1;" name="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
     </div>
-    <div class="row modal-body">
+    <div class="row modal-body shadow p-3 mb-5 bg-body-tertiary rounded">
         <div class="card content-grid modal-body col-xl-6 px-3 py-3 my-1 overflow-y-auto">
             <div class="card-header">
                 Appointments
             </div>
             <div class="appointment-list overflow-auto border rounded p-3" style="max-height: 800px;">
+                {% block content%}
                 {% for user in user_list %}
                 <table class="table table-hover">
                     <div class="appointment-item d-flex justify-content-between align-items-center mb-3">
@@ -53,7 +64,13 @@
                         </div>
                         <div class="appointment-time text-end">
                             <p class="mb-0">{{ user.Date }}</p>
+                            {% if user.Date > today %}
                             <span class="badge bg-success">Upcoming</span>
+                            {% elif user.Date == today %}
+                            <span class="badge bg-warning">Ongoing</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Done</span>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -70,13 +87,12 @@
                         <button type="button" data-bs-dismiss="modal" class=" btn-light btn-close"  aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h5>Are you sure?</h5>
+                        <h6>Do you want to delete appointment with {{ user.name }}</h6>
                     </div>
                     <div class="modal-footer">
                         <a href="{% url 'delete-appointment' user.id %}">
                             <button type="button" class="btn btn-danger">Delete</button>
                         </a>
-                    </div>
                     </div>
                 </div>
                 </div>
@@ -84,6 +100,7 @@
                     <p class="text-muted">No appointments found.</p>
                 {% endfor %}
                 </table>
+                {% endblock %}
             </div>
         </div>
     </div>

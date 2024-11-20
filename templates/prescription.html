@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescription page</title>
+    <title>Prescription</title>
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'images/capsule.svg' %}">
     <link rel="stylesheet" href="{% static 'PrescriptionStyles.css' %}">
@@ -27,7 +27,7 @@
             </button>
         </div>
             {% csrf_token %}
-        <main class="content">
+        <main class="content shadow p-3 mb-5 bg-body-tertiary rounded">
             {% if submitted %}
                 <p>Form submitted successfully! QR code generated and sent to the email.</p>
             {% endif %}

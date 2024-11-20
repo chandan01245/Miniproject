@@ -1,0 +1,53 @@
+{% extends 'appointments.html' %}
+    {% block content %}
+    {% for user in searched %}
+    <table class="table table-hover">
+        <div class="appointment-item d-flex justify-content-between align-items-center mb-3">
+            <div class="appointment-info list-group">
+                <h5 class="mb-0">{{ user.name }}</h5>
+                <small>{{ user.phone }}</small>
+                <small>Check-up</small>
+                <div class="appointment-info">
+                    <h6>Reason: {{ user.Reason }}</h6>
+                </div>
+            </div>
+            <div class="appointment-time text-end">
+                <p class="mb-0">{{ user.Date }}</p>
+                {% if user.Date > today %}
+                <span class="badge bg-success">Upcoming</span>
+                {% elif user.Date == today %}
+                <span class="badge bg-warning">Ongoing</span>
+                {% else %}
+                <span class="badge bg-secondary">Done</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Delete
+                </button>
+        </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header bg-primary" >
+            <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Delete Appointment</h1>
+            <button type="button" data-bs-dismiss="modal" class=" btn-light btn-close"  aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <h5>Are you sure?</h5>
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'delete-appointment' user.id %}">
+                <button type="button" class="btn btn-danger">Delete</button>
+            </a>
+        </div>
+        </div>
+    </div>
+    </div>
+    {% empty %}
+        <p class="text-muted">No appointments found.</p>
+    {% endfor %}
+    </table>
+    {% endblock %}
