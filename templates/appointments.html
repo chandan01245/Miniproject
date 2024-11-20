@@ -57,10 +57,29 @@
                         </div>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                Delete
+                            </button>
+                    </div>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header bg-primary" >
+                        <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Delete Appointment</h1>
+                        <button type="button" data-bs-dismiss="modal" class=" btn-light btn-close"  aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Are you sure?</h5>
+                    </div>
+                    <div class="modal-footer">
                         <a href="{% url 'delete-appointment' user.id %}">
-                            <button class="btn btn-danger" type="button">Delete</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
                         </a>
                     </div>
+                    </div>
+                </div>
+                </div>
                 {% empty %}
                     <p class="text-muted">No appointments found.</p>
                 {% endfor %}
