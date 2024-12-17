@@ -25,7 +25,7 @@ class medicine(models.Model):
 class appointment(models.Model):
     name= models.CharField(max_length=20)
     date = models.DateField(max_length=8)
-    phone = models.CharField(max_length=10,default=0000000000)
+    phone = models.CharField(max_length=10)
     Reason = models.CharField(max_length=80,default="Sick")
 
     def __str__(self):

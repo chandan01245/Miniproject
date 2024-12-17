@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-mkez+ou1aoop&xrrih$(&-)&ps*8k6)=qhp36c44y6)w^z!2^q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['DocCare.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -74,11 +73,12 @@ WSGI_APPLICATION = 'miniproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
 
 
@@ -126,3 +126,6 @@ LOGIN_URL = '/'  # Redirect to this URL if the user is not logged in
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+

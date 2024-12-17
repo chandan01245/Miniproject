@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 
 from .form import medication_form, register_form
 from .models import appointment, register
+from .mongodb import save_appointment
 from .qr_generator import qr_gen
 
 
@@ -19,11 +20,11 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request,user)
-            messages.success(request,("You have been logged in"))
             request.session['username'] = username
+            messages.success(request,("You have been logged in"))
             return redirect("dashboard")
         else:
-            messages.success(request,("Invalid password. PLease try again"))
+            messages.error(request,("Invalid password. PLease try again"))
             return redirect('login')
     else:
         return render(request,"Login.html")
@@ -62,8 +63,9 @@ def user_registration(request):
         print("POST data:", request.POST)
         form = register_form(request.POST)
         if form.is_valid():
-            form.save()
+            new_register = form.save()
             messages.success(request,("New patient registered"))
+            save_appointment(new_register)
             return HttpResponseRedirect('/Registration?submitted=True')
         else:
             print("Form errors:", form.errors)
