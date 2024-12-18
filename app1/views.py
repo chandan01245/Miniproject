@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from django.core.validators import EmailValidator
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -43,7 +43,8 @@ def user_dashboard(request):
         print("POST data:", request.POST)
         form = register_form(request.POST)
         if form.is_valid():
-            form.save()
+            new_register = form.save()
+            save_appointment(new_register)
             return HttpResponseRedirect('/Dashboard?submitted=True')
         else:
             print("Form errors:", form.errors)

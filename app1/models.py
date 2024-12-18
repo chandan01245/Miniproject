@@ -4,8 +4,8 @@ from django.db import models
 
 class register(models.Model):
     name = models.CharField(max_length=20)
-    phone = models.CharField(max_length=10)
-    mail = models.EmailField(max_length=30,blank=True)
+    phone = models.CharField(max_length=10,blank=True)
+    mail = models.EmailField(max_length=30)
     Date = models.DateField(max_length=8)
     Reason = models.TextField(max_length=80,default="Sick",blank=True)
 
