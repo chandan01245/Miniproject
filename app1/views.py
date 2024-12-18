@@ -1,8 +1,9 @@
 from datetime import datetime
-from django.core.validators import EmailValidator
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.validators import EmailValidator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
@@ -39,12 +40,13 @@ def logout_user(request):
 def user_dashboard(request):
     submitted = False
     today = datetime.today().date()
+    username = request.session.get('username', 'Guest')
     if request.method == 'POST':
         print("POST data:", request.POST)
         form = register_form(request.POST)
         if form.is_valid():
             new_register = form.save()
-            save_appointment(new_register)
+            save_appointment(new_register,username)
             return HttpResponseRedirect('/Dashboard?submitted=True')
         else:
             print("Form errors:", form.errors)
@@ -54,7 +56,6 @@ def user_dashboard(request):
             submitted = True
     user_list = register.objects.all()
     user_count = register.objects.all().count()
-    username = request.session.get('username', 'Guest')
     return render(request,"Dashboard.html",{'user_list':user_list,'user_count':user_count,'user':username,'today':today})
 
 @login_required
@@ -63,10 +64,11 @@ def user_registration(request):
     if request.method == 'POST':
         print("POST data:", request.POST)
         form = register_form(request.POST)
+        username = request.session.get('username', 'Guest')
         if form.is_valid():
             new_register = form.save()
             messages.success(request,("New patient registered"))
-            save_appointment(new_register)
+            save_appointment(new_register,username)
             return HttpResponseRedirect('/Registration?submitted=True')
         else:
             print("Form errors:", form.errors)

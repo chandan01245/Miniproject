@@ -80,6 +80,10 @@ body {
     color: #374151;
 }
 
+.form-floating {
+    margin-bottom: 1rem;
+}
+
 .input-group {
     position: relative;
 }

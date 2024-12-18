@@ -10,15 +10,16 @@ appointments = db['appointments']
 
 
 # Function to save an appointment in MongoDB
-def save_appointment(register_object):
-    Date = register_object.Date.strftime("%Y-%m-%d")
+def save_appointment(register_object,username):
+    Date = register_object.Date.strftime("%d-%m-%Y")
     mail = register_object.mail
     remainder(Date,mail)
     appointment_data = {
+        "Doctor": username,
         "name": register_object.name,
         "phone": register_object.phone,
         "mail": register_object.mail,
-        "Date": register_object.Date.strftime("%Y-%m-%d"),
+        "Date": register_object.Date.strftime("%d-%m-%Y"),
         "Reason": register_object.Reason
     }
     result = appointments.insert_one(appointment_data)
